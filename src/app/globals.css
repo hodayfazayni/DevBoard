@@ -1,26 +1,137 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #00243d;
+}
+
+
+nav{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5vh;
+  gap: 2rem;
+  border: solid 1px #1565c0;
+  background-color: #1565c0;
+  border-radius: 3rem;
+  margin: 10px;
+  width: 94vw;
+} 
+
+.link{
+  color: #e3f2fd;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.link:hover{
+  background-color: #0d47a1;
+
+}
+
+.container{
+  display: flex;
+  align-items: center;
+  height: 90vh;
+  gap: 1rem;
+  margin: 2rem;
+  width: 20rem;
+}
+
+article{
+  background-color: #1565c0;
+  border: #1565c0 solid 1px;
+  border-radius: 2rem;
+  text-align: center;
+  padding: 0.5rem;
+  color: #e3f2fd;
+  height: 10rem;
+  position: relative;
+}
+
+article h2{
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.header .details{
+    position: absolute;
+    top: 9;
+    right: 9;
+    letter-spacing: 2;
+    font-weight: bold;
+    padding: 0.1rem 0.1rem;
+    border-radius: 0.2rem;
+    text-align: center;
+}
+
+.header .details:hover{
+  background-color: #0d47a1;
+  cursor: pointer;
+}
+
+
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  gap: 1rem;
+}
+
+
+input, textarea{
+  border: #0d47a1 soldi 1px;
+  background-color: #0d47a1;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: #e3f2fd;
+}
+input, textarea:focus{
+  outline-color: #e3f2fd;
+}
+
+
+textarea{
+  padding: 0.9rem;
+}
+
+
+
+#projectContainer{
+  margin: 3rem;
+}
+
+#projectContainer h1, #projectContainer p{
+  color: #e3f2fd;
+}
+
+span{
+  padding: 0.5rem;
+}
+
+button{
+  display: flex;
+  border: #1565c0 solid 1px;
+  border-radius: 2rem;
+  padding: 0.5rem;
+  margin-top: 5px;
+  background-color: #1565c0;
+  color: #e3f2fd;
+}
+
+button:hover{
+  background-color: #0d47a1;
+  border-color: #0d47a1;
+  transition: all ease-out 0.3s;
+  cursor: pointer;
 }
