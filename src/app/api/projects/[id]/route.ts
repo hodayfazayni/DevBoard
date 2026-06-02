@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
-import { projects } from '@/lib/projects';
+interface Object {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+}
+
+const filePath = path.join(process.cwd(), 'src/lib/data.json');
+const data = fs.readFileSync(filePath, 'utf-8');
+const projects = JSON.parse(data);
 
 export async function GET(
   request: Request,
@@ -8,42 +19,46 @@ export async function GET(
 ) {
   const { id } = await params;    
 
-  const project = projects.find(p => p.id === id);
+  const project = projects.find((p: Object) => p.id === id);
 
   if (!project) {
-    return NextResponse.json({ error: " not found " }, { status: 404 });
+    return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
   return NextResponse.json(project);
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const body = await request.json();
 
-  const index = projects.findIndex(p => p.id === id);
-  if (index === -1) {
-    return NextResponse.json({ error: "not found" }, { status: 404 });
+  const projectIndex = projects.findIndex((p: Object) => p.id === id);
+
+  if (projectIndex === -1) {
+    return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  projects[index] = { ...projects[index], ...body };
-  return NextResponse.json(projects[index]);
+  projects.splice(projectIndex, 1);
+  fs.writeFileSync(filePath, JSON.stringify(projects));
+
+  return NextResponse.json({ message: "Project deleted successfully" });
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
 
-  const index = projects.findIndex(p => p.id === id);
-  if (index === -1) {
-    return NextResponse.json({ error: " not found " }, { status: 404 });
+
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+
+  const { id } = await params;
+  const body = await request.json();
+  
+  const projectIndex = projects.findIndex((p: Object) => p.id === id);
+
+  if (projectIndex === -1) {
+    return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  projects.splice(index, 1);
-  return NextResponse.json({ message: " project deleted " });
+  const updatedData = await request.json();
+  projects[projectIndex] = { ...projects[projectIndex], ...updatedData };
+  fs.writeFileSync(filePath, JSON.stringify(projects));
+
+  return NextResponse.json(projects[projectIndex]);
 }

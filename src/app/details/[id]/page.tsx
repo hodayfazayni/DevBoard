@@ -1,47 +1,47 @@
+import { notFound } from "next/navigation";
+import DeleteButton from "@/components/deleteButton";
+import Link from "next/link";
 
-import { notFound } from 'next/navigation';
 
-export default async function ProjectDetail({ 
-  params 
-}: { 
-  params: Promise<{ id: string }> 
-}) {
-  
-  const { id } = await params;     
-
+async function fetchProject(id: string) {
   const res = await fetch(`http://localhost:3000/api/projects/${id}`, {
-    cache: "no-store",
-    next: { revalidate: 0 }
+    cache: "no-store"
   });
-
 
   if (!res.ok) {
     console.error(`not found: ${id}`);
     notFound();
   }
 
-  const project = await res.json();
+  return res.json();
+}
 
 
+export default async function ProjectDetail({ params }: { params: { id: string } }) {
+  const { id } = await params;
+
+  const project = await fetchProject(id);
+  
 
   return (
-    <div className="max-w-3xl mx-auto p-8" id='projectContainer'>
-      <h1 className="text-5xl font-bold mb-4">{project.title}</h1>
-      <p className="text-gray-500 mb-8">ID: {project.id}</p>
-      <p>Created at: {project.date}</p>
-      <div className="prose text-lg">
-        <p>{project.description}</p>
+    <div className="projectContainer">
+      <h1 className="text-5xl text-center font-bold mb-4">{project.title}</h1>
+      <div className="info">
+        <h2 className="text-xl text-center">ID: {project.id}</h2>
+        <span className="status">{project.status}</span>
       </div>
 
-      <div className="mt-8">
-        <span className="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full">
-          {project.status}
-        </span>
-        <button>
-          <img src="/delete.svg" alt="delete" />
-          delete
-        </button>
+      <div className="flex justify-center items-center gap-4 mb-4">
+        <DeleteButton id={id} />
+        <Link href={`/edit/${id}`} className="edit">
+          Edit
+        </Link>
+      </div>
+
+      <div className="description">
+        <p>{project.description}</p>
       </div>
     </div>
   );
 }
+

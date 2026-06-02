@@ -26,12 +26,12 @@ export default function RootLayout({
   return (
     <html
       lang="en">
-      <body>
-        <nav>
-          <Link href="/" className="link">projects</Link>
-          <Link href="/create" className="link">create</Link>
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans bg-cyan-100 min-h-screen `}>
+        <nav className="flex justify-center gap-4 bg-yellow-400 h-12 items-center text-lg">
+          <Link href="/" className="text-blue-500 font-bold hover:text-cyan-300">projects</Link>
+          <Link href="/create" className="text-blue-500 font-bold hover:text-cyan-300">create</Link>
         </nav>
-        <main>
+        <main className="flex justify-center items-center h-screen">
           {children}
         </main>        
         </body>
