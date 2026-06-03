@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-
 interface Object {
   id: string;
   title: string;
@@ -9,14 +8,18 @@ interface Object {
   status: string;
 }
 
-const filePath = path.join(process.cwd(), 'src/lib/data.json');
-const data = fs.readFileSync(filePath, 'utf-8');
-const projects = JSON.parse(data);
+function getProject(){
+  const filePath = path.join(process.cwd(), "src/lib/data.json");
+  const data = fs.readFileSync(filePath, "utf-8");
+  return JSON.parse(data);
+}
+
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }   
 ) {
+  const projects = getProject();
   const { id } = await params;    
 
   const project = projects.find((p: Object) => p.id === id);
@@ -28,7 +31,9 @@ export async function GET(
   return NextResponse.json(project);
 }
 
+
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const projects = getProject();
   const { id } = await params;
 
   const projectIndex = projects.findIndex((p: Object) => p.id === id);
@@ -38,6 +43,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   }
 
   projects.splice(projectIndex, 1);
+  const filePath = path.join(process.cwd(), "src/lib/data.json");
   fs.writeFileSync(filePath, JSON.stringify(projects));
 
   return NextResponse.json({ message: "Project deleted successfully" });
@@ -46,19 +52,25 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-
+  const projects = getProject();
+  const body = await request.formData();
   const { id } = await params;
-  const body = await request.json();
-  
+
   const projectIndex = projects.findIndex((p: Object) => p.id === id);
 
   if (projectIndex === -1) {
     return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  const updatedData = await request.json();
-  projects[projectIndex] = { ...projects[projectIndex], ...updatedData };
-  fs.writeFileSync(filePath, JSON.stringify(projects));
+  const updatedProject = {
+    id,
+    title: body.get("title") as string,
+    description: body.get("description") as string,
+    status: body.get("status") as string,
+  };
+  const filePath = path.join(process.cwd(), "src/lib/data.json");
 
-  return NextResponse.json(projects[projectIndex]);
+  projects[projectIndex] = updatedProject;
+  fs.writeFileSync(filePath, JSON.stringify(projects));
+  return NextResponse.json(updatedProject);
 }

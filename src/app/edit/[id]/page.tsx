@@ -1,4 +1,6 @@
-"use server";
+export const dynamic = "force-dynamic";
+
+
 async function handleSubmit(id: string, formData: FormData) {
 
     "use server";

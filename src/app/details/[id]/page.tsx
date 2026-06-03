@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+
+
 import { notFound } from "next/navigation";
 import DeleteButton from "@/components/deleteButton";
 import Link from "next/link";
