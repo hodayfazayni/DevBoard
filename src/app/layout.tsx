@@ -30,6 +30,7 @@ export default function RootLayout({
         <nav className="flex justify-center gap-4 bg-yellow-400 h-12 items-center text-lg">
           <Link href="/" className="text-blue-500 font-bold hover:text-cyan-300">projects</Link>
           <Link href="/create" className="text-blue-500 font-bold hover:text-cyan-300">create</Link>
+          <Link href="/account" className="text-blue-500 font-bold hover:text-cyan-300">account</Link>
         </nav>
         <main className="flex justify-center items-center h-screen">
           {children}

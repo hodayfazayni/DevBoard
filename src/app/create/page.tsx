@@ -1,10 +1,16 @@
-"use client";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 
-function handleSubmit(formData: FormData) {
-    fetch("/api/projects", {
-        method: "POST",
-        body: formData,
-    });
+async function handleSubmit(formData: FormData) {
+    "use server";
+    const session = await auth();
+    const project = await prisma.project.create({
+        data: {
+            title: formData.get("title") as string,
+            userId: session?.user?.id as string,
+            description: formData.get("description") as string
+        }
+    })
 }
 
 export default function Create(){
